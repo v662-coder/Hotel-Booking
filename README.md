@@ -12,4 +12,4 @@
 ## Screenshots
 
 - Hotel Room Booking
-C:\Users\91799\Desktop\Hotel room Booking\Image\ht.png
+Image\ht.png
