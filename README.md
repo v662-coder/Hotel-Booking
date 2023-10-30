@@ -12,4 +12,5 @@
 ## Screenshots
 
 - Hotel Room Booking
-Image\ht.png
+
+ht.png
