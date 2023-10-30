@@ -12,4 +12,4 @@
 ## Screenshots
 
 - Hotel Room Booking
- (/images/ht.png)
+ (image/ht.png)
