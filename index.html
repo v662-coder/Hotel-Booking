@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>React App</title>
+    <link rel="stylesheet" href="style.css">
+   
+  </head>
+
+  <body>
+    <h1>
+        Hotel Room Booking
+    </h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      let customers = [];
+      const capacity = 25;
+      let seatsLeft = 25;
+
+      const handleFormSubmit = (event) => {
+        event.preventDefault();
+
+        const guestCount = parseInt(event.target.elements.guestCount.value);
+        const name = event.target.elements.name.value;
+        const phoneNumber = event.target.elements.phoneNumber.value;
+
+        // Optionally handle duplicate name entries
+        if (customers.some((customer) => customer.name === name)) {
+          alert("Customer already exists");
+          return;
+        }
+
+        if (guestCount > seatsLeft) {
+          alert("Guest count exceeds capacity");
+          return;
+        }
+
+        const newCustomer = {
+          guestCount,
+          name,
+          phoneNumber,
+          status: "Click to Check Out",
+          checkInTime: new Date().toLocaleTimeString(),
+          checkOutTime: "-",
+        };
+
+        // Decrease seatsLeft by guestCount
+        seatsLeft -= guestCount;
+
+        // Add the new customer to the beginning of the customers array
+        customers.unshift(newCustomer);
+
+        // Clear the form inputs
+        event.target.reset();
+
+        // Update the component to render the changes
+        forceUpdate();
+      };
+
+      const handleCheckout = (index) => {
+        const customer = customers[index];
+
+        // If already checked out, do nothing
+        if (customer.checkOutTime !== "-") return;
+
+        // Get the current timestamp
+        const timestamp = new Date().toLocaleTimeString();
+
+        // Set the checkOutTime for the customer
+        customer.checkOutTime = timestamp;
+        customer.status = `Checked Out at ${timestamp}`;
+
+        // Increase seatsLeft by guestCount
+        seatsLeft += customer.guestCount;
+
+        // Update the component to render the changes
+        forceUpdate();
+      };
+
+      const handleDelete = (index) => {
+        const customer = customers[index];
+
+        if (customer.checkOutTime === "-") {
+          // If not checked out, increase seatsLeft by guestCount
+          seatsLeft += customer.guestCount;
+        }
+
+        // Remove the customer from the array
+        customers.splice(index, 1);
+
+        // Update the component to render the changes
+        forceUpdate();
+      };
+
+      // Helper function to force update the component
+      const forceUpdate = () => {
+        rootElement.render(<App />);
+      };
+
+      const handleDownload = () => {
+        const csvContent = "data:text/csv;charset=utf-8," + 
+          "Count,Name,Phone,Status,Check In,Check Out\n" +
+          customers.map((customer) => {
+            const { guestCount, name, phoneNumber, status, checkInTime, checkOutTime } = customer;
+            return `${guestCount},${name},${phoneNumber},${status},${checkInTime},${checkOutTime}`;
+          }).join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "customer_details.csv");
+        document.body.appendChild(link);
+        link.click();
+      };
+
+      const App = () => (
+        <div className="App" style={{ textAlign: "center" }}>
+          <div>
+            <h2>Total Capacity: {capacity}</h2>
+            <h2>Seats Left: {seatsLeft}</h2>
+          </div>
+
+          <form onSubmit={handleFormSubmit}>
+            <div>
+              <input type="number" name="guestCount" placeholder="Guest Count" />
+              <input type="text" name="name" placeholder="Primary Guest Name" />
+              <input type="text" name="phoneNumber" placeholder="Phone Number" />
+              <button type="submit">Add Customer</button>
+            </div>
+          </form>
+
+          <table border="1px" style={{ margin: "auto" }}>
+            <thead>
+              <tr>
+                <th>Count</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Remove Entry</th>
+              </tr>
+            </thead>
+            <tbody>
+              {customers.map((customer, index) => (
+                <tr key={index}>
+                  <td>{customer.guestCount}</td>
+                  <td>{customer.name}</td>
+                  <td>{customer.phoneNumber}</td>
+                  <td
+                    className={customer.checkOutTime !== "-" ? "served" : "dining"}
+                    onClick={() => handleCheckout(index)}
+                  >
+                    {customer.status}
+                  </td>
+                  <td>{customer.checkInTime}</td>
+                  <td>{customer.checkOutTime}</td>
+                  <td>
+                    <button onClick={() => handleDelete(index)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button onClick={handleDownload}>Download Customer Details</button>
+        </div>
+      );
+
+      const rootElement = ReactDOM.createRoot(document.getElementById("root"));
+      rootElement.render(<App />);
+    </script>
+  </body>
+</html>

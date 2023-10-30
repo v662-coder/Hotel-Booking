@@ -1,0 +1,93 @@
+/* Styling for the main container */
+.App {
+    display: flex;
+   
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    background-color: #806464;
+    padding: 20px;
+  }
+  
+  /* Styling for the form */
+  form {
+    width: 60%;
+   
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Styling for the form elements inside a div */
+  form div {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  /* Styling for buttons */
+  button {
+    width: 120px;
+    padding-block: 5px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+  
+  /* Styling for the "Download Customer Details" button */
+  button:last-child {
+    background-color: #008CBA;
+  }
+  
+  /* Styling for table cells */
+  th,
+  td {
+    padding: 10px;
+  }
+  
+  /* Styling for input fields */
+  input {
+    padding: 5px;
+    font-size: 1.1rem;
+  }
+  
+  /* Styling for checked out customers */
+  .served {
+    background-color: red;
+    color: white;
+  }
+  
+  /* Styling for customers yet to be checked out */
+  .dining {
+    background-color: lime;
+    cursor: pointer;
+  }
+  
+  /* Styling for the header */
+  h1 {
+    text-align: center;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+  }
+  
+  /* Styling for the table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    background-color: #f0f0f0;
+  }
+  
+  /* Styling for the table header row */
+  thead tr {
+    background-color: #46103b;
+    color: white;
+  }
+  
+  /* Styling for the table data rows */
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
